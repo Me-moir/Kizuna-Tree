@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Instagram, Facebook, Mail, Twitter, Youtube, Music } from 'lucide-react';
-
+import bannerImg from '/banner.jpg';
+import logoImg from '/logo.png';
 
 const App = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [tooltip, setTooltip] = useState({ show: false, message: '' });
+  const [tooltip, setTooltip] = useState({ show: false, data: null });
 
   useEffect(() => {
     setIsVisible(true);
@@ -48,16 +49,30 @@ const App = () => {
   };
 
   const handleButtonClick = (buttonType) => {
-    const message = buttonType === 'Membership Application' ? 'Applications are still closed' : 'Coming soon';
+    let tooltipData;
+    
+    if (buttonType === 'Membership Application') {
+      tooltipData = {
+        buttonName: 'Membership Application',
+        title: 'Applications are still closed.',
+        description: 'Please stay tuned for University-wide Recruitment 101 in September. Official announcements will also follow.'
+      };
+    } else {
+      tooltipData = {
+        buttonName: 'Partner and Sponsorship',
+        title: 'Processing',
+        description: 'We are currently processing the necessary documents, please come back later.'
+      };
+    }
     
     setTooltip({
       show: true,
-      message: message
+      data: tooltipData
     });
 
     setTimeout(() => {
       setTooltip(prev => ({ ...prev, show: false }));
-    }, 3000);
+    }, 4000);
   };
 
   // Light theme with peachy pink background and red highlights
@@ -205,12 +220,13 @@ const App = () => {
           opacity: tooltip.show ? 1 : 0,
           visibility: tooltip.show ? 'visible' : 'hidden',
           transition: 'opacity 0.3s ease, visibility 0.3s ease',
-          pointerEvents: tooltip.show ? 'auto' : 'none'
+          pointerEvents: tooltip.show ? 'auto' : 'none',
+          padding: '20px'
         }}>
           <div className={`centered-tooltip ${tooltip.show ? 'pulse' : ''}`} style={{
             background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
             color: 'white',
-            padding: '20px 32px',
+            padding: '24px 32px',
             borderRadius: '16px',
             fontSize: '18px',
             fontWeight: '600',
@@ -218,7 +234,8 @@ const App = () => {
             boxShadow: '0 20px 40px rgba(220, 38, 38, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2)',
             border: '2px solid rgba(255, 255, 255, 0.2)',
             backdropFilter: 'blur(10px)',
-            minWidth: '280px',
+            maxWidth: '400px',
+            width: '100%',
             position: 'relative',
             overflow: 'hidden',
             transform: tooltip.show ? 'scale(1)' : 'scale(0.8)'
@@ -244,45 +261,38 @@ const App = () => {
             
             {/* Content */}
             <div style={{ position: 'relative', zIndex: '1' }}>
+              {/* Button Name (smaller text at top) */}
               <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                marginBottom: '8px'
-              }}>
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                </div>
-                <span style={{ fontSize: '16px', opacity: '0.9' }}>Notice</span>
-              </div>
-              
-              <div style={{
-                fontSize: '18px',
-                fontWeight: '700',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                letterSpacing: '0.5px'
-              }}>
-                {tooltip.message}
-              </div>
-              
-              <div style={{
-                marginTop: '12px',
                 fontSize: '14px',
                 opacity: '0.8',
-                fontWeight: '400'
+                fontWeight: '400',
+                marginBottom: '8px',
+                color: 'rgba(255, 255, 255, 0.9)'
               }}>
-                We'll notify you when available
+                {tooltip.data?.buttonName}
+              </div>
+              
+              {/* Main Title */}
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                letterSpacing: '0.5px',
+                marginBottom: '12px',
+                lineHeight: '1.2'
+              }}>
+                {tooltip.data?.title}
+              </div>
+              
+              {/* Description */}
+              <div style={{
+                fontSize: '14px',
+                opacity: '0.9',
+                fontWeight: '400',
+                lineHeight: '1.5',
+                color: 'rgba(255, 255, 255, 0.95)'
+              }}>
+                {tooltip.data?.description}
               </div>
             </div>
           </div>
@@ -386,7 +396,7 @@ const App = () => {
               <div style={{
                 width: '100%',
                 height: '100%',
-                backgroundImage: `url(/banner.jpg)`,
+                backgroundImage: `url(${bannerImg})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
@@ -429,7 +439,7 @@ const App = () => {
                     fontSize: '20px',
                     fontWeight: 'bold',
                     color: 'white',
-                    backgroundImage: `url(/logo.png)`,
+                    backgroundImage: `url(${logoImg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
