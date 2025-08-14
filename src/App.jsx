@@ -75,6 +75,10 @@ const App = () => {
     }, 4000);
   };
 
+  const handleTooltipClick = () => {
+    setTooltip(prev => ({ ...prev, show: false }));
+  };
+
   // Light theme with peachy pink background and red highlights
   const theme = {
     background: '#fdf2f8', // peachy pink background
@@ -113,21 +117,23 @@ const App = () => {
 
     @keyframes tooltipSlideIn {
       0% {
-        transform: scale(0.8);
+        transform: translateY(-20px) scale(0.9);
         opacity: 0;
       }
       100% {
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         opacity: 1;
       }
     }
 
-    @keyframes tooltipPulse {
-      0%, 100% {
-        transform: scale(1);
+    @keyframes tooltipSlideOut {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
       }
-      50% {
-        transform: scale(1.05);
+      100% {
+        transform: translateY(-20px) scale(0.9);
+        opacity: 0;
       }
     }
 
@@ -159,12 +165,12 @@ const App = () => {
       transform: scale(0.98);
     }
 
-    .centered-tooltip {
-      animation: tooltipSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    .centered-tooltip.entering {
+      animation: tooltipSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .centered-tooltip.pulse {
-      animation: tooltipPulse 2s ease-in-out infinite;
+    .centered-tooltip.exiting {
+      animation: tooltipSlideOut 0.3s cubic-bezier(0.4, 0, 0.6, 1);
     }
 
     /* Remove backdrop-filter for better mobile performance */
@@ -219,27 +225,33 @@ const App = () => {
           zIndex: '1001',
           opacity: tooltip.show ? 1 : 0,
           visibility: tooltip.show ? 'visible' : 'hidden',
-          transition: 'opacity 0.3s ease, visibility 0.3s ease',
+          transition: 'opacity 0.4s ease, visibility 0.4s ease',
           pointerEvents: tooltip.show ? 'auto' : 'none',
           padding: '20px'
         }}>
-          <div className={`centered-tooltip ${tooltip.show ? 'pulse' : ''}`} style={{
-            background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
-            color: 'white',
-            padding: '24px 32px',
-            borderRadius: '16px',
-            fontSize: '18px',
-            fontWeight: '600',
-            textAlign: 'center',
-            boxShadow: '0 20px 40px rgba(220, 38, 38, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2)',
-            border: '2px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            maxWidth: '400px',
-            width: '100%',
-            position: 'relative',
-            overflow: 'hidden',
-            transform: tooltip.show ? 'scale(1)' : 'scale(0.8)'
-          }}>
+          <div 
+            className={`centered-tooltip ${tooltip.show ? 'entering' : 'exiting'}`} 
+            onClick={handleTooltipClick}
+            style={{
+              background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+              color: 'white',
+              padding: '24px 32px',
+              borderRadius: '16px',
+              fontSize: '18px',
+              fontWeight: '600',
+              textAlign: 'center',
+              boxShadow: '0 20px 40px rgba(220, 38, 38, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2)',
+              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)',
+              maxWidth: '400px',
+              width: '100%',
+              position: 'relative',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              transform: tooltip.show ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.9)',
+              transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease'
+            }}
+          >
             {/* Glowing border effect */}
             <div style={{
               position: 'absolute',
@@ -290,25 +302,40 @@ const App = () => {
                 opacity: '0.9',
                 fontWeight: '400',
                 lineHeight: '1.5',
-                color: 'rgba(255, 255, 255, 0.95)'
+                color: 'rgba(255, 255, 255, 0.95)',
+                marginBottom: '16px'
               }}>
                 {tooltip.data?.description}
+              </div>
+
+              {/* Click to close hint */}
+              <div style={{
+                fontSize: '12px',
+                opacity: '0.7',
+                fontWeight: '400',
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontStyle: 'italic'
+              }}>
+                Click to close
               </div>
             </div>
           </div>
         </div>
 
         {/* Overlay when tooltip is shown */}
-        <div style={{
-          position: 'fixed',
-          inset: '0',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          zIndex: '1000',
-          opacity: tooltip.show ? 1 : 0,
-          visibility: tooltip.show ? 'visible' : 'hidden',
-          transition: 'opacity 0.3s ease, visibility 0.3s ease',
-          backdropFilter: 'blur(2px)'
-        }} />
+        <div 
+          style={{
+            position: 'fixed',
+            inset: '0',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            zIndex: '1000',
+            opacity: tooltip.show ? 1 : 0,
+            visibility: tooltip.show ? 'visible' : 'hidden',
+            transition: 'opacity 0.4s ease, visibility 0.4s ease',
+            backdropFilter: 'blur(2px)'
+          }}
+          onClick={handleTooltipClick}
+        />
 
         {/* Ambient lighting effects */}
         <div style={{

@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Kizuna-Tree/', // IMPORTANT: matches your GitHub repo name
+  base: '/' // Change from '/Kizuna-Tree/' to '/'
 })
