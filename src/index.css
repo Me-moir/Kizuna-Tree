@@ -1,0 +1,115 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000 !important;
+}
+
+html {
+  background-color: #000 !important;
+  min-height: 100%;
+  /* Prevent Safari overscroll bounce */
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #000 !important;
+  /* Safari overscroll fix */
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Force black background on all elements during overscroll */
+html::before,
+body::before {
+  content: '';
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  right: 0;
+  height: 300vh;
+  background-color: #000 !important;
+  z-index: -1000;
+}
+
+/* Additional Safari overscroll fix */
+html, body {
+  background-color: #000 !important;
+  background-image: none !important;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  html {
+    background-color: #000 !important;
+    background-attachment: fixed;
+    background-image: none !important;
+  }
+  
+  body {
+    background-color: #000 !important;
+    background-attachment: fixed;
+    background-image: none !important;
+  }
+
+  /* Prevent any gradients from affecting overscroll */
+  html::after,
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 0;
+    right: 0;
+    bottom: -200px;
+    background-color: #000 !important;
+    z-index: -999;
+    pointer-events: none;
+  }
+}
+
+/* Prevent overscroll bounce on iOS Safari */
+@media screen and (-webkit-min-device-pixel-ratio: 1) {
+  html {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    -webkit-overscroll-behavior-y: none;
+  }
+  
+  body {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    -webkit-overscroll-behavior-y: none;
+  }
+}
+
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
