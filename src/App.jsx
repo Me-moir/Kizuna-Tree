@@ -598,6 +598,7 @@ const SakuraPetals = ({ isMobile }) => {
 };
 
 // Tooltip Component
+// Tooltip Component
 const Tooltip = ({ tooltip, onTooltipClick, isMobile }) => (
   <>
     <div style={{
@@ -618,7 +619,12 @@ const Tooltip = ({ tooltip, onTooltipClick, isMobile }) => (
     }}>
       <div 
         className={`centered-tooltip ${tooltip.show ? 'entering' : 'exiting'}`} 
-        onClick={onTooltipClick}
+        onClick={(e) => {
+          // Only close if clicking the background, not the links
+          if (e.target === e.currentTarget) {
+            onTooltipClick();
+          }
+        }}
         style={{
           background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
           color: 'white',
@@ -630,11 +636,10 @@ const Tooltip = ({ tooltip, onTooltipClick, isMobile }) => (
           boxShadow: '0 20px 40px rgba(220, 38, 38, 0.4), 0 8px 16px rgba(0, 0, 0, 0.2)',
           border: '2px solid rgba(255, 255, 255, 0.2)',
           backdropFilter: isMobile ? 'none' : 'blur(10px)',
-          maxWidth: '400px',
+          maxWidth: '420px',
           width: '100%',
           position: 'relative',
           overflow: 'hidden',
-          cursor: 'pointer',
           transform: tooltip.show ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.9)',
           transition: isMobile ? 'transform 0.3s ease, opacity 0.3s ease' : 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease'
         }}
@@ -684,18 +689,73 @@ const Tooltip = ({ tooltip, onTooltipClick, isMobile }) => (
             fontWeight: '400',
             lineHeight: '1.5',
             color: 'rgba(255, 255, 255, 0.95)',
-            marginBottom: '16px'
+            marginBottom: tooltip.data?.links ? '20px' : '16px'
           }}>
             {tooltip.data?.description}
           </div>
 
-          <div style={{
-            fontSize: '12px',
-            opacity: '0.7',
-            fontWeight: '400',
-            color: 'rgba(255, 255, 255, 0.8)',
-            fontStyle: 'italic'
-          }}>
+          {/* Display links if they exist */}
+          {tooltip.data?.links && (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              marginBottom: '20px'
+            }}>
+              {tooltip.data.links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    borderRadius: '10px',
+                    padding: '12px 20px',
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                    backdropFilter: 'blur(10px)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <span>{link.label}</span>
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              ))}
+            </div>
+          )}
+
+          <div 
+            onClick={onTooltipClick}
+            style={{
+              fontSize: '12px',
+              opacity: '0.7',
+              fontWeight: '400',
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontStyle: 'italic',
+              cursor: 'pointer'
+            }}
+          >
             Click to close
           </div>
         </div>
@@ -1149,21 +1209,30 @@ const App = () => {
   const handleLinkClick = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
-
-  const handleButtonClick = (buttonType) => {
-    let tooltipData;
-    
-    if (buttonType === 'Membership Application') {
-      tooltipData = {
-        buttonName: 'Membership Application',
-        title: 'Applications are still closed.',
-        description: 'Please stay tuned for University-wide Recruitment 101 in September. Official announcements will also follow.'
-      };
+const handleButtonClick = (buttonType) => {
+  let tooltipData;
+  
+  if (buttonType === 'Membership Application') {
+    tooltipData = {
+      buttonName: 'Membership Application',
+      title: 'Applications are now open!',
+      description: 'Choose your application type:',
+      links: [
+        {
+          label: 'Apply for Membership',
+          url: 'https://forms.gle/KSevfUop966rjCpQ7'
+        },
+        {
+          label: 'Apply for Staff Position',
+          url: 'https://forms.gle/JxeFRkTyF8YDiGpv7'
+        }
+      ]
+    };
     } else {
       tooltipData = {
         buttonName: 'Partner and Sponsorship',
         title: 'Interest Check',
-        description: 'For Sponsorship and Partnership interests, kindly reach on to us via Facebook messenger for discussions.'
+        description: 'For Sponsorship and Partnership interests, kindly reach on to us via Facebook messenger for discussions and applications.'
       };
     }
     

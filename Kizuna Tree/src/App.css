@@ -1,0 +1,213 @@
+/* Component-specific styles for LinkTree */
+
+/* Pattern overlay for banner */
+.pattern-overlay {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* Action button styles */
+.action-button {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    transition: 
+      transform 0.3s ease-out,
+      box-shadow 0.3s ease-out,
+      background-color 0.3s ease-out,
+      color 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+    /* Responsive font size for md screens */
+  }
+  @media (min-width: 768px) {
+    .action-button {
+      font-size: 0.875rem;
+    }
+  }
+  .action-button:hover {
+    transform: scale(1.05) translateY(-4px);
+    box-shadow: 0 10px 20px 0 rgba(239, 68, 68, 0.2), 0 4px 6px 0 rgba(0,0,0,0.2);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: rgb(254, 202, 202);
+  }
+
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+  padding: 1px;
+  background: linear-gradient(to right, #ef4444, #dc2626, #ef4444);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: subtract;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+}
+
+.action-button::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(24px);
+  border-radius: 0.75rem;
+  z-index: -1;
+}
+
+.action-button:hover::before {
+  opacity: 1;
+}
+
+.action-button:hover {
+  color: rgb(254 202 202);
+}
+
+/* Social link button styles */
+.social-link-button {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  transition: 
+    transform 0.3s ease-out,
+    box-shadow 0.3s ease-out,
+    background-color 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px 0 rgba(0,0,0,0.15);
+}
+@media (min-width: 768px) {
+  .social-link-button {
+    padding: 1rem 1.5rem;
+  }
+}
+.social-link-button:hover {
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 10px 20px 0 rgba(239, 68, 68, 0.2), 0 4px 6px 0 rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.social-link-button:active {
+  transform: scale(0.95);
+  transition-duration: 75ms;
+}
+
+/* Gradient border overlay */
+.gradient-border-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+  padding: 1px;
+  background: linear-gradient(to right, #ef4444, #dc2626, #ef4444);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: subtract;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+}
+
+.gradient-border-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(24px);
+  border-radius: 1rem;
+}
+
+.social-link-button:hover .gradient-border-overlay {
+  opacity: 1;
+}
+
+/* Glass reflection */
+.glass-reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.social-link-button:hover .glass-reflection {
+  opacity: 1;
+}
+
+/* Accent line */
+.accent-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: scaleY(0);
+  transition: transform 0.3s;
+}
+
+.social-link-button:hover .accent-line {
+  transform: scaleY(1);
+}
+
+/* Floating elements animations */
+.floating-element-1 {
+  animation-delay: 1s;
+}
+
+.floating-element-2 {
+  animation-delay: 2s;
+}
+
+/* Custom hover effects for better performance */
+.social-link-button:hover {
+  transform: scale(1.05) translateY(-4px);
+}
+
+.social-link-button:active {
+  transform: scale(0.95);
+  transition-duration: 75ms;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .social-link-button {
+    padding: 0.75rem 1rem;
+  }
+  
+  .action-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Enhanced backdrop blur support */
+@supports (backdrop-filter: blur(24px)) {
+  .social-link-button,
+  .action-button {
+    backdrop-filter: blur(24px);
+  }
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(24px)) {
+  .social-link-button,
+  .action-button {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
