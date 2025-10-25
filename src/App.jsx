@@ -1215,18 +1215,7 @@ const handleButtonClick = (buttonType) => {
   if (buttonType === 'Membership Application') {
     tooltipData = {
       buttonName: 'Membership Application',
-      title: 'Applications are now open!',
-      description: 'Choose your application type:',
-      links: [
-        {
-          label: 'Apply for Membership',
-          url: 'https://forms.gle/KSevfUop966rjCpQ7'
-        },
-        {
-          label: 'Apply for Staff Position',
-          url: 'https://forms.gle/JxeFRkTyF8YDiGpv7'
-        }
-      ]
+      title: 'Applications for AY 2025 - 2025 are now closed!'
     };
     } else {
       tooltipData = {
