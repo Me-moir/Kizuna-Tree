@@ -1221,7 +1221,7 @@ const handleButtonClick = (buttonType) => {
       tooltipData = {
         buttonName: 'Partner and Sponsorship',
         title: 'Interest Check',
-        description: 'For Sponsorship and Partnership interests, kindly reach on to us via Facebook messenger for discussions and applications.'
+        description: 'For Sponsorship and Partnership interests, kindly reach on to us via Facebook messenger for discussions'
       };
     }
     
