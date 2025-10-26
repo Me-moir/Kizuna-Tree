@@ -209,7 +209,7 @@ const Header = ({ isDark, onToggle, onMessengerClick, onShareClick, isMobile, th
           <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" style={{ position: 'relative', zIndex: 2 }}>
             <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
           </svg>
-          <span style={{ position: 'relative', zIndex: 2 }}>Let's Chat</span>
+          <span style={{ position: 'relative', zIndex: 2 }}>Contact Us</span>
           <span className="glow-button-border special-border" />
         </button>
 
@@ -1043,69 +1043,210 @@ const SocialLinks = ({ isVisible, onLinkClick, theme, isMobile }) => (
   </div>
 );
 
-// Current Events Component
-const CurrentEvents = ({ isVisible, theme, isMobile }) => (
-  <div style={{
-    marginTop: '32px',
-    transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-    opacity: isVisible ? '1' : '0',
-    transition: isMobile ? 'all 800ms ease' : 'all 1000ms cubic-bezier(0.4, 0, 0.2, 1)',
-    transitionDelay: '800ms',
-    position: 'relative',
-    zIndex: '10'
-  }}>
-    <h2 style={{
-      fontSize: '20px',
-      fontWeight: 'bold',
-      color: theme.text,
-      marginBottom: '16px',
-      textAlign: 'center',
-      letterSpacing: '0.025em',
-      textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
-    }}>
-      Current Events
-    </h2>
+// FAQ Accordion Component - Ultra optimized for mobile/Safari with auto-close
+const FAQAccordion = ({ isVisible, theme, isMobile }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+  const [timerKey, setTimerKey] = useState(0);
+  const timerRef = React.useRef(null);
+
+  const faqs = [
+    {
+      question: "What is TNK?",
+      answer: "Thomasian Nihon Kyoukai (TNK) is the official student organization in the University of Santo Tomas dedicated to promoting traditional and modern Japanese culture through various activities, events, and cultural exchanges."
+    },
+    {
+      question: "How can I become a member?",
+      answer: "Membership applications open at the start of each academic year during recruitment week around the month of September to October. Stay tuned to our social media channels for announcements about recruitment periods and requirements."
+    },
+    {
+      question: "What events does TNK organize?",
+      answer: "TNK organizes cultural festivals, Japanese language workshops, anime screenings, cosplay events, traditional tea ceremonies, and various activities that celebrate Japanese culture throughout the academic year."
+    },
+    {
+      question: "Do I need to speak Japanese to join?",
+      answer: "No! You don't need to speak Japanese to join TNK. We welcome all students who are interested in Japanese culture, regardless of their language proficiency or nationality."
+    },
+    {
+      question: "What is the difference between regular member and staff?",
+      answer: "Regular members can participate in TNK exclusive events and even join in our Discord server, while staffs take on additional responsibilities, such as organizing events and leading projects."
+    },
+    {
+      question: "How can I contact TNK?",
+      answer: "You can reach us through our Facebook page, send us an email at tnk.uso@ust.edu.ph, or visit our social media channels linked above. We're always happy to answer your questions!"
+    }
+  ];
+
+  // Auto-close when timer completes
+  React.useEffect(() => {
+    if (openIndex !== null) {
+      // Clear any existing timer
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      
+      // Set new timer to auto-close after 15 seconds
+      timerRef.current = setTimeout(() => {
+        setOpenIndex(null);
+      }, 15000);
+    }
     
+    // Cleanup
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [openIndex, timerKey]);
+
+  const handleToggle = (index) => {
+    if (openIndex === index) {
+      setOpenIndex(null);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    } else {
+      setOpenIndex(index);
+      setTimerKey(prev => prev + 1);
+    }
+  };
+
+  return (
     <div style={{
-      backgroundColor: theme.cardBg,
-      border: `1px solid ${theme.border}`,
-      borderRadius: '16px',
-      padding: '24px',
-      textAlign: 'center',
-      boxShadow: `0 4px 16px ${theme.lightShadow}`
+      marginTop: '32px',
+      transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
+      opacity: isVisible ? '1' : '0',
+      transition: isMobile ? 'all 800ms ease' : 'all 1000ms cubic-bezier(0.4, 0, 0.2, 1)',
+      transitionDelay: '800ms',
+      position: 'relative',
+      zIndex: '10'
     }}>
+      <style>{`
+        @keyframes timerShrink {
+          from {
+            transform: scaleX(1);
+          }
+          to {
+            transform: scaleX(0);
+          }
+        }
+        
+        /* Ultra-optimized accordion for mobile - instant on mobile, animated on desktop */
+        .faq-content {
+          overflow: hidden;
+          ${isMobile ? '' : 'transition: max-height 0.25s ease-out;'}
+        }
+        
+        .faq-content.closed {
+          max-height: 0;
+        }
+        
+        .faq-content.open {
+          max-height: ${isMobile ? '1000px' : '500px'};
+        }
+      `}</style>
+      
+      <h2 style={{
+        fontSize: '20px',
+        fontWeight: 'bold',
+        color: theme.text,
+        marginBottom: '16px',
+        textAlign: 'center',
+        letterSpacing: '0.025em',
+        textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+      }}>
+        Frequently Asked Questions
+      </h2>
+      
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         gap: '12px'
       }}>
-        <div style={{
-          width: '48px',
-          height: '48px',
-          background: '#dc2626',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          opacity: '0.7'
-        }}>
-          <svg width="24" height="24" style={{color: 'white'}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        
-        <p style={{color: theme.textMuted, fontSize: '14px', margin: '0'}}>
-          No current events for now
-        </p>
-        
-        <p style={{color: theme.textSubtle, fontSize: '12px', margin: '0'}}>
-          Check back later for upcoming registrations
-        </p>
+        {faqs.map((faq, index) => (
+          <div
+            key={index}
+            style={{
+              backgroundColor: theme.cardBg,
+              border: `1px solid ${theme.border}`,
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: `0 2px 8px ${theme.lightShadow}`
+            }}
+          >
+            <button
+              onClick={() => handleToggle(index)}
+              style={{
+                width: '100%',
+                padding: '16px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: theme.text,
+                textAlign: 'left',
+                fontWeight: '600',
+                fontSize: '14px',
+                WebkitTapHighlightColor: 'transparent'
+              }}
+            >
+              <span>{faq.question}</span>
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                style={{
+                  transform: openIndex === index ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: isMobile ? 'none' : 'transform 0.2s ease',
+                  flexShrink: 0,
+                  marginLeft: '12px'
+                }}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            <div className={`faq-content ${openIndex === index ? 'open' : 'closed'}`}>
+              <div style={{
+                padding: '0 16px 16px 16px',
+                color: theme.textMuted,
+                fontSize: '13px',
+                lineHeight: '1.6'
+              }}>
+                {faq.answer}
+              </div>
+              
+              {/* Gradient Timer Line */}
+              {openIndex === index && (
+                <div style={{
+                  height: '3px',
+                  width: '100%',
+                  background: theme.border,
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  <div
+                    key={timerKey}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      background: 'linear-gradient(90deg, #dc2626 0%, #ef4444 50%, #f87171 100%)',
+                      transformOrigin: 'right',
+                      animation: 'timerShrink 8s linear forwards'
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Footer Component
 const Footer = ({ isVisible, theme, isMobile }) => (
@@ -1215,13 +1356,13 @@ const handleButtonClick = (buttonType) => {
   if (buttonType === 'Membership Application') {
     tooltipData = {
       buttonName: 'Membership Application',
-      title: 'Applications for AY 2025 - 2025 are now closed!'
+      title: 'Applications for AY 2025 - 2025 are now closed! Stay tuned for next opening!'
     };
     } else {
       tooltipData = {
         buttonName: 'Partner and Sponsorship',
         title: 'Interest Check',
-        description: 'For Sponsorship and Partnership interests, kindly reach on to us via Facebook messenger for discussions'
+        description: 'For Sponsorship and Partnership interests, kindly reach on to us via Facebook messenger for discussions.'
       };
     }
     
@@ -1309,7 +1450,7 @@ const handleButtonClick = (buttonType) => {
             }}>
               <ProfileHeader isVisible={isVisible} onButtonClick={handleButtonClick} theme={theme} isMobile={isMobile} />
               <SocialLinks isVisible={isVisible} onLinkClick={handleLinkClick} theme={theme} isMobile={isMobile} />
-              <CurrentEvents isVisible={isVisible} theme={theme} isMobile={isMobile} />
+              <FAQAccordion isVisible={isVisible} theme={theme} isMobile={isMobile} />
               <Footer isVisible={isVisible} theme={theme} isMobile={isMobile} />
             </div>
           </div>
